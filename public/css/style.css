@@ -15,7 +15,7 @@ body {
 
 .p {
     float: left;
-    width: 100px;
+    width: 300px;
 }
 
 .input {
@@ -24,7 +24,7 @@ body {
 
 input {
     padding: 10px;
-    margin-left: 20px;
+    margin-left: 100px;
 }
 
 .message {

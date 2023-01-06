@@ -2,15 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use DateTime;
-use Illuminate\Database\DBAL\TimestampType;
+use App\Http\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    //
+    private $userService;
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
+    /**
+     * Get All Users
+     * 
+     * @return array $users
+     */
+    public function index()
+    {
+        $users = $this->userService->getUsers();
+        return view('index', ['user' => $users]);
+    }
+
+    /**
+     * Save User
+     * 
+     * @param Request $request
+     */
     public function save(Request $request)
     {
         $validated = $request->validate([
@@ -22,47 +41,79 @@ class UserController extends Controller
                 'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
             ]
         ]);
-        $users = new User();
-        $users->name = $request->name;
-        $users->email = $request->email;
-        $users->password = Hash::make($request->password);
-        $users->save();
-        return redirect()->route('index')->with(['user' => $users]);
+        $request['password'] = Hash::make($request->password);
+        $this->userService->save($request->all());
+        return redirect()->route('index');
     }
-    public function index()
+
+    /**
+     * Show Password By Id
+     * 
+     * @param integer $id
+     * @return Object $password
+     */
+    public function password($id)
     {
-        $users = User::where('del_flag', '=', 0)->get();
-        // \Log::info($users);
-        return view('index', ['user' => $users]);
+        $password = $this->userService->showpassword($id);
+        return view('password', ['password' => $password]);
     }
-    public function delete($id)
+
+    /**
+     * Update password By Id
+     */
+    public function updatepassword($id, Request $request)
     {
-        // \Log::info('heo');
-        // \Log::info($id);
-        $row = User::find($id);
-        $row->del_flag = 1;
-        $row->update();
-        return redirect('index');
+        // $row = $request->password_confirmation;
+        // dd($row);
+        $validated = $request->validate([
+            'oldpassword' => [
+                'required',
+                'min:6',
+            ],
+            'newpassword' => 'min:6|required_with:password_confirmation|same:password_confirmation|different:oldpassword',
+            'password_confirmation' => 'min:6|required',
+        ]);
+        $request['newpassword'] = Hash::make($request->newpassword);
+        $this->userService->updatePassword($id, $request);
+        return redirect()->route('index');
     }
+
+    /**
+     * Show User By Id
+     * 
+     * @param integer $id
+     * @return Object $user
+     */
     public function edit($id)
     {
-        $user = User::where('id', $id)->first();
+        $user = $this->userService->getUserbyId($id);
         return view('edit', ['user' => $user]);
     }
 
+    /**
+     * Update user By Id
+     * 
+     * @param integer $id 
+     * @param Request $request
+     */
     public function update($id, Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|max:255',
             'email' =>  'required|email:rfc',
         ]);
-
-        //\Log::info($id);
-        $row = User::find($id);
-        $row->name = $request->name;
-        $row->email = $request->email;
-        $row->update();
-        // $affeted = User::where('id', $request->id)->update(['name' => $request->name, 'email' => $request->email]);
+        $this->userService->updateUserById($id, $request);
         return redirect()->route('index');
+    }
+
+    /**
+     * Delete User By Id
+     * 
+     * @param integer $id
+     */
+    public function delete($id)
+    {
+        $this->userService->deleteUserById($id);
+        return redirect('index');
     }
 }

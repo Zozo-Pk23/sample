@@ -25,3 +25,5 @@ Route::post('create', [UserController::class, 'save']);
 Route::delete('/delete/{id}', [UserController::class, 'delete']);
 Route::get('/edit/{id}', [UserController::class, 'edit']);
 Route::post('/update/{id}/{request}', [UserController::class, 'update'])->name('update');
+Route::get('/password/{id}', [UserController::class, 'password'])->name('password');
+Route::post('/updatepassword/{id}/{request}', [UserController::class, 'updatepassword'])->name('updatepassword');

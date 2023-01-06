@@ -12,6 +12,7 @@
 </head>
 
 <body>
+    <h1>User List</h1>
     <table>
         <tr>
             <td>Name</td>
@@ -24,8 +25,12 @@
             <td>{{$users->name}}</td>
             <td>{{$users->email}} </td>
             <td>
+                <a href="/password/{{$users->id}}">Change Passsword</a>
+            </td>
+            <td>
                 <a href="/edit/{{$users->id}}"><i class="fa fa-address-book" aria-hidden="true"></i></a>
             </td>
+
             <td>
                 <form id="delete-form" method="POST" action="delete/{{$users->id}}">
                     {{ csrf_field() }}
