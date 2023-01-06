@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\CRUDController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,8 +20,8 @@ Route::get('/', function () {
 Route::get('/createuser', function () {
     return view('/createuser');
 });
-Route::get('/index', [CRUDController::class, 'index'])->name('index');
-Route::post('create', [CRUDController::class, 'save']);
-Route::delete('/delete/{id}', [CRUDController::class, 'delete']);
-Route::get('/edit/{id}', [CRUDController::class, 'edit']);
-Route::post('/update', [CRUDController::class, 'update'])->name('update');
+Route::get('/index', [UserController::class, 'index'])->name('index');
+Route::post('create', [UserController::class, 'save']);
+Route::delete('/delete/{id}', [UserController::class, 'delete']);
+Route::get('/edit/{id}', [UserController::class, 'edit']);
+Route::post('/update/{id}/{request}', [UserController::class, 'update'])->name('update');

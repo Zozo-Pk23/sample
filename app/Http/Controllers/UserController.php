@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use DateTime;
+use Illuminate\Database\DBAL\TimestampType;
 use Illuminate\Http\Request;
 
-class CRUDController extends Controller
+class UserController extends Controller
 {
     //
     public function save(Request $request)
@@ -47,12 +49,19 @@ class CRUDController extends Controller
         return view('edit', ['user' => $user]);
     }
 
-    public function update(Request $request)
+    public function update($id, Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|max:255',
             'email' =>  'required|email:rfc',
         ]);
+
+        //\Log::info($id);
+        $row = User::find($id);
+        $row->name = $request->name;
+        $row->email = $request->email;
+        $row->update();
+        // $affeted = User::where('id', $request->id)->update(['name' => $request->name, 'email' => $request->email]);
         return redirect()->route('index');
     }
 }

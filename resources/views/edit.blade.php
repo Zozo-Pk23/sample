@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <form action="/update" method="POST">
+    <form action="/update/{{$user->id}}/{{$user}}" method="POST">
         @csrf
         <div class="card">
             <h1>User Create</h1>
