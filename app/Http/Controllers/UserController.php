@@ -6,6 +6,7 @@ use App\Models\User;
 use DateTime;
 use Illuminate\Database\DBAL\TimestampType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -24,7 +25,7 @@ class UserController extends Controller
         $users = new User();
         $users->name = $request->name;
         $users->email = $request->email;
-        $users->password = $request->password;
+        $users->password = Hash::make($request->password);
         $users->save();
         return redirect()->route('index')->with(['user' => $users]);
     }

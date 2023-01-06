@@ -37,7 +37,7 @@
             </div>
             <div class="clearfix" style="margin-top: 20px;">
                 <div class="p">
-                    <button onclick="document.getElementById('name').value=null;document.getElementById('email').value=null;document.getElementById('password').value=null;" type="reset">Clear</button>
+                <a href="{{ route('index') }}">Cancel</a>
                 </div>
                 <div class="input">
                     <input type="submit" value="Update">

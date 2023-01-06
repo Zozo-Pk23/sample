@@ -1,6 +1,5 @@
 body {
     background-color: aqua;
-    width: 100%;
 }
 
 .card {
@@ -41,4 +40,8 @@ table {
     width: 80%;
     margin: auto;
     background-color: white;
+    padding: 20px;
+}
+tbody{
+    margin: 10px;
 }
